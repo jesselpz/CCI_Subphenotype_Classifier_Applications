@@ -1,0 +1,158 @@
+---
+title: "a-Help during package development"
+author: "Sébastien Rochette"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{a-Help during package development}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+<script type="text/javascript">
+$(document).ready(function () {
+  window.initializeCodeFolding("show" === "show");
+});
+</script>
+
+```{r setuprmd, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+## Load package {attachment}
+```{r}
+library(attachment)
+```
+
+## Use "dev/dev_history.R"
+
+When building your package, create a file called "dev_history.R" in a "dev/" directory. You will store all "manual" calls to `devtools::xxx` and `usethis::xxx` in this script.  
+Its first line should be :
+
+```r
+usethis::use_build_ignore("dev")
+```
+
+You can then call {attachment} in this file to help you build your description file.
+
+## Fill your DESCRIPTION file
+
+What you really want is to fill and update your description file along with the modifications of your documentation. Indeed, only this function will really be called in your "dev/dev_history.R".  
+Run `attachment::att_amend_desc()` each time before `devtools::check()`, this will save you some warnings and errors !
+
+```{r, eval=FALSE}
+att_amend_desc()
+```
+
+#### Example on a fake package
+
+If you are running this inside a Rmd like here, you may need parameter `inside_rmd = TRUE`.  
+
+```{r}
+# Copy package in a temporary directory
+tmpdir <- tempfile(pattern = "insidermd")
+dir.create(tmpdir)
+file.copy(system.file("dummypackage",package = "attachment"), tmpdir, recursive = TRUE)
+dummypackage <- file.path(tmpdir, "dummypackage")
+# browseURL(dummypackage)
+att_amend_desc(path = dummypackage, inside_rmd = TRUE)
+
+# Clean temp files after this example
+unlink(tmpdir, recursive = TRUE)
+```
+
+## Propose content for "Remotes" field
+
+`set_remotes_to_desc()` adds packages that were installed from other source than CRAN to `Remotes:` field in DESCRIPTION.  
+
+For instance:
+
+- For GitHub: `Remotes: thinkr-open/attachment`
+- For GitLab: `Remotes: gitlab::jimhester/covr`
+- For Git: `Remotes: git::https://theurl/package_git.git`
+- For local package: `Remotes: local::c:\mylocalpackage` or `Remotes: local::subdir/mylocalpackage`
+- For Bioconductor: `Remotes: bioc::3.3/package_bioc`
+- For r-universe: Show a message to inform how to use r-universe with `options`, like `r-universe: need to set options to repos="https://thinkr-open.r-universe.dev"`
+
+
+You may want to run it after `att_amend_desc()`.
+
+```{r eval=FALSE}
+att_amend_desc(dummypackage) %>%
+  set_remotes_to_desc()
+```
+
+If you only want to find if packages were installed from other source than CRAN, without amending DESCRIPTION, you can use `find_remotes()`.
+
+You can use it on a vector of packages names 
+```{r eval=TRUE}
+find_remotes(pkg = c("attachment", "desc", "glue"))
+```
+
+You may also want to combine it to `att_from_description()`
+```{r, eval=FALSE}
+att_from_description() %>%
+  find_remotes()
+```
+
+If you want to get the complete list of packages installed on your computer with non-CRAN repositories:
+```{r, eval=FALSE}
+find_remotes(list.dirs(.libPaths(), full.names = FALSE, recursive = FALSE))
+```
+
+You can test it if you install {fusen} from GitHub or r-universe:
+
+```{r, eval=FALSE}
+# From GitHub
+remotes::install_github("ThinkR-open/fusen",
+                        quiet = TRUE, upgrade = "never")
+attachment::find_remotes("fusen")
+#> $fusen
+#> [1] "ThinkR-open/fusen"
+
+# From r-universe as default repos
+install.packages("fusen", repos = "https://thinkr-open.r-universe.dev")
+attachment::find_remotes("fusen")
+#> r-universe: need to set options to repos="https://thinkr-open.r-universe.dev" 
+```
+
+
+## Create a file for package installation
+
+Once your package is finished. Well, is a package ever finished ? Let's say, once you want to release a version of your package, you may want to deliver the list of dependencies your users will have to install. A little script like `install.packages(c(...all dep...))` would be so nice :
+
+```{r, eval=FALSE}
+create_dependencies_file()
+```
+
+This file will be placed in `inst/dependencies.R` and contains :
+
+```{r, eval=FALSE}
+# No Remotes ----
+# remotes::install_github("ThinkR-open/fcuk")
+# Attachments ----
+to_install <- c("covr", "desc", "devtools", "glue", "knitr", "magrittr", "rmarkdown", "stats", "stringr", "testthat", "utils")
+for (i in to_install) {
+  message(paste("looking for ", i))
+  if (!requireNamespace(i)) {
+    message(paste("     installing", i))
+    install.packages(i)
+  }
+}
+```
+
+## Other possibilities
+
+Of course, you can also use {attachment} out of a package to list all package dependencies of R scripts using `att_from_rscripts()` or Rmd files using `att_from_rmds()`.
+
+```{r, eval=TRUE}
+dummypackage <- system.file("dummypackage", package = "attachment")
+
+att_from_rscripts(path = file.path(dummypackage, "R"))
+att_from_rmds(path = file.path(dummypackage, "vignettes"), inside_rmd = TRUE)
+```
+
+

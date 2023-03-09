@@ -1,0 +1,9 @@
+dockerfiler-package	dockerfiler-package
+Dockerfile	Dockerfile
+dockerfiler	dockerfiler-package
+docker_ignore_add	docker_ignore_add
+dock_from_desc	dockerfiles
+dock_from_renv	dock_from_renv
+gen_base_image	gen_base_image
+get_sysreqs	get_sysreqs
+r	r

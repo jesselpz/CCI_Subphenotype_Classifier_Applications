@@ -1,0 +1,6 @@
+Dockerfile              A Dockerfile template
+dock_from_desc          Create a Dockerfile from a DESCRIPTION
+dock_from_renv          Create a Dockerfile from an 'renv.lock' file
+docker_ignore_add       Create a dockerignore file
+get_sysreqs             Get system requirements
+r                       Turn an R call into an Unix call

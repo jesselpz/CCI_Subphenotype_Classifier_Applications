@@ -1,0 +1,21 @@
+Package: ccishiny
+Title: An Amazing Shiny App
+Version: 0.0.0.9000
+Authors@R: 
+    person(given = "firstname",
+           family = "lastname",
+           role = c("aut", "cre"),
+           email = "your@email.com")
+Description: What the package does (one paragraph).
+License: What license is it under?
+Imports: config (>= 0.3.1), golem (>= 0.3.5), shiny (>= 1.7.4)
+Encoding: UTF-8
+RoxygenNote: 7.2.3
+Suggests: testthat (>= 3.0.0)
+Config/testthat/edition: 3
+NeedsCompilation: no
+Packaged: 2023-02-10 08:33:07 UTC; Peizhao Liu
+Author: firstname lastname [aut, cre]
+Maintainer: firstname lastname <your@email.com>
+Depends: R (>= 3.5.0)
+Built: R 4.2.0; ; 2023-02-10 08:33:09 UTC; windows
