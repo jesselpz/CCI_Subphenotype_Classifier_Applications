@@ -14,3 +14,6 @@ The criteria we used were:
  (b) coexist with the evidence of persistent organ dysfunction (cardiovascular SOFA ≥ 1 or score in any other organ system ≥ 2) at Day 14.
 
 Please note that this application is intended for clinical and research purposes only and cannot replace the clinician's guidance.
+
+For more detailed information, please check:
+Liu P, Li S, Zheng T, Wu J, Fan Y, Liu X, Gong W, Xie H, Liu J, Li Y, Jiang H, Zhao F, Zhang J, Wu L, Ren H, Hong Z, Chen J, Gu G, Wang G, Zhang Z, Wu X, Zhao Y, Ren J. Subphenotyping heterogeneous patients with chronic critical illness to guide individualised fluid balance treatment using machine learning: a retrospective cohort study. EClinicalMedicine. 2023 Apr 20;59:101970. doi: 10.1016/j.eclinm.2023.101970. PMID: 37131542; PMCID: PMC10149181.
